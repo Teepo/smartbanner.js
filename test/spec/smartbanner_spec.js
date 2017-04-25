@@ -23,6 +23,7 @@ describe('SmartBanner', function() {
       <meta name="smartbanner:button-url-apple" content="https://itunes.apple.com/us/genre/ios/id36?mt=8">
       <meta name="smartbanner:button-url-google" content="https://play.google.com/store">
       <meta name="smartbanner:disable-positioning" content="false">
+      <meta name="smartbanner:expiration-day" content="1">
     </head>
     <body>
       <div class="ui-page ui-page-active" style="position:absolute; top:12px;"></div>
