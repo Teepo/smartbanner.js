@@ -221,7 +221,7 @@ var OptionParser = function () {
             Array.from(metas).forEach(function (meta) {
                 var name = meta.getAttribute('name');
                 var content = meta.getAttribute('content');
-                if (name && content && valid(name) && content.length > 0) {
+                if (name && content && valid(name)) {
                     optionName = name.split(':')[1];
                     if (Array.from(optionName).includes('-')) {
                         optionName = convertToCamelCase(optionName);
