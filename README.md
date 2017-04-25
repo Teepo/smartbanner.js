@@ -40,7 +40,7 @@ Customisable smart app banner for iOS and Android.
 
 OR you can instantiate `smartbanner.js` with given parameters:
 
-````js
+```js
 (new SmartBanner({
     title : 'Smart Application',
     author : 'Smartbanner Contributors',
