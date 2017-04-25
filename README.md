@@ -38,6 +38,16 @@ Customisable smart app banner for iOS and Android.
 <!-- End SmartBanner configuration -->
 ```
 
+OR you can instantiate `smartbanner.js` with given parameters:
+
+````js
+(new SmartBanner({
+    title : 'Smart Application',
+    author : 'Smartbanner Contributors',
+    ...
+})).publish();
+```
+
 Additionally, JavaScript and CSS has to be included:
 
 ```html
