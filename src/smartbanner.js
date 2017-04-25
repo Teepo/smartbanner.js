@@ -1,121 +1,163 @@
 import OptionParser from './optionparser.js';
-import Detector from './detector.js';
-import Bakery from './bakery.js';
+import Detector     from './detector.js';
+import Bakery       from './bakery.js';
 
 const DEFAULT_PLATFORMS = 'android,ios';
 
 let datas = {
-  originalTop: 'data-smartbanner-original-top',
-  originalMarginTop: 'data-smartbanner-original-margin-top'
+    originalTop: 'data-smartbanner-original-top',
+    originalMarginTop: 'data-smartbanner-original-margin-top'
 };
 
 function handleExitClick(event, self) {
-  self.exit();
-  event.preventDefault();
+    self.exit();
+    event.preventDefault();
 }
 
 function handleJQueryMobilePageLoad(event) {
-  if (!this.positioningDisabled) {
-    setContentPosition(event.data.height);
-  }
+
+    if (!this.positioningDisabled)
+        setContentPosition(event.data.height);
 }
 
 function addEventListeners(self) {
-  let closeIcon = document.querySelector('.js_smartbanner__exit');
-  closeIcon.addEventListener('click', (event) => handleExitClick(event, self));
-  if (Detector.jQueryMobilePage()) {
-    $(document).on('pagebeforeshow', self, handleJQueryMobilePageLoad);
-  }
+
+    let closeIcon = document.querySelector('.js_smartbanner__exit');
+
+    closeIcon.addEventListener('click', (event) => handleExitClick(event, self));
+
+    if (Detector.jQueryMobilePage())
+        $(document).on('pagebeforeshow', self, handleJQueryMobilePageLoad);
+
 }
 
 function removeEventListeners() {
-  if (Detector.jQueryMobilePage()) {
-    $(document).off('pagebeforeshow', handleJQueryMobilePageLoad);
-  }
+
+    if (Detector.jQueryMobilePage())
+        $(document).off('pagebeforeshow', handleJQueryMobilePageLoad);
 }
 
 function setContentPosition(value) {
-  let wrappers = Detector.wrapperElement();
-  for (let i = 0, l = wrappers.length, wrapper; i < l; i++) {
-    wrapper = wrappers[i];
-    if (Detector.jQueryMobilePage()) {
-      if (wrapper.getAttribute(datas.originalTop)) {
-        continue;
-      }
-      let top = parseFloat(getComputedStyle(wrapper).top);
-      wrapper.setAttribute(datas.originalTop, isNaN(top) ? 0 : top);
-      wrapper.style.top = value + 'px';
-    } else {
-      if (wrapper.getAttribute(datas.originalMarginTop)) {
-        continue;
-      }
-      let margin = parseFloat(getComputedStyle(wrapper).marginTop);
-      wrapper.setAttribute(datas.originalMarginTop, isNaN(margin) ? 0 : margin);
-      wrapper.style.marginTop = value + 'px';
+
+    let wrappers = Detector.wrapperElement();
+
+    for (let i = 0, l = wrappers.length, wrapper; i < l; i++)
+    {
+        wrapper = wrappers[i];
+
+        if (Detector.jQueryMobilePage())
+        {
+
+            if (wrapper.getAttribute(datas.originalTop))
+                continue;
+
+            let top = parseFloat(getComputedStyle(wrapper).top);
+            wrapper.setAttribute(datas.originalTop, isNaN(top) ? 0 : top);
+            wrapper.style.top = value + 'px';
+
+        } else {
+
+            if (wrapper.getAttribute(datas.originalMarginTop))
+                continue;
+
+            let margin = parseFloat(getComputedStyle(wrapper).marginTop);
+
+            wrapper.setAttribute(datas.originalMarginTop, isNaN(margin) ? 0 : margin);
+            wrapper.style.marginTop = value + 'px';
+        }
     }
-  }
 }
 
 function restoreContentPosition() {
-  let wrappers = Detector.wrapperElement();
-  for (let i = 0, l = wrappers.length, wrapper; i < l; i++) {
-    wrapper = wrappers[i];
-    if (Detector.jQueryMobilePage() && wrapper.getAttribute(datas.originalTop)) {
-      wrapper.style.top = wrapper.getAttribute(datas.originalTop) + 'px';
-    } else if (wrapper.getAttribute(datas.originalMarginTop)) {
-      wrapper.style.marginTop = wrapper.getAttribute(datas.originalMarginTop) + 'px';
+
+    let wrappers = Detector.wrapperElement();
+
+    for (let i = 0, l = wrappers.length, wrapper; i < l; i++)
+    {
+        wrapper = wrappers[i];
+
+        if (Detector.jQueryMobilePage() && wrapper.getAttribute(datas.originalTop))
+            wrapper.style.top = wrapper.getAttribute(datas.originalTop) + 'px';
+        else if (wrapper.getAttribute(datas.originalMarginTop))
+            wrapper.style.marginTop = wrapper.getAttribute(datas.originalMarginTop) + 'px';
     }
-  }
 }
 
 export default class SmartBanner {
 
-  constructor() {
-    let parser = new OptionParser();
-    this.options = parser.parse();
-    this.platform = Detector.platform();
-  }
-
-  // DEPRECATED. Will be removed.
-  get originalTop() {
-    let wrapper = Detector.wrapperElement()[0];
-    return parseFloat(wrapper.getAttribute(datas.originalTop));
-  }
-
-  // DEPRECATED. Will be removed.
-  get originalTopMargin() {
-    let wrapper = Detector.wrapperElement()[0];
-    return parseFloat(wrapper.getAttribute(datas.originalMarginTop));
-  }
-
-  get priceSuffix() {
-    if (this.platform === 'ios') {
-      return this.options.priceSuffixApple;
-    } else if (this.platform === 'android') {
-      return this.options.priceSuffixGoogle;
+    constructor() {
+        const parser = new OptionParser();
+        this.options = parser.parse();
+        this.platform = Detector.platform();
     }
-    return '';
-  }
 
-  get icon() {
-    if (this.platform === 'android') {
-      return this.options.iconGoogle;
-    } else {
-      return this.options.iconApple;
+    /**
+     * @static
+     * @deprecated
+     *
+     * @returns {Number}
+     */
+    get originalTop() {
+        const wrapper = Detector.wrapperElement()[0];
+        return parseFloat(wrapper.getAttribute(datas.originalTop));
     }
-  }
 
-  get buttonUrl() {
-    if (this.platform === 'android') {
-      return this.options.buttonUrlGoogle;
-    } else if (this.platform === 'ios') {
-      return this.options.buttonUrlApple;
+  /**
+   * @static
+   * @deprecated
+   *
+   * @returns {Number}
+   */
+    get originalTopMargin() {
+        const wrapper = Detector.wrapperElement()[0];
+        return parseFloat(wrapper.getAttribute(datas.originalMarginTop));
     }
-    return '#';
-  }
 
-  get html() {
-    return `<div class="smartbanner smartbanner--${this.platform} js_smartbanner">
+    /**
+     * @static
+     *
+     * @returns {String}
+     */
+    get priceSuffix() {
+        if (this.platform === 'ios')
+            return this.options.priceSuffixApple;
+        else if (this.platform === 'android')
+            return this.options.priceSuffixGoogle;
+        return '';
+    }
+
+    /**
+     * @static
+     *
+     * @returns {String}
+     */
+    get icon() {
+        if (this.platform === 'android')
+            return this.options.iconGoogle;
+        else
+            return this.options.iconApple;
+    }
+
+    /**
+     * @static
+     *
+     * @returns {String}
+     */
+    get buttonUrl() {
+        if (this.platform === 'android')
+            return this.options.buttonUrlGoogle;
+        else if (this.platform === 'ios')
+            return this.options.buttonUrlApple;
+        return '#';
+    }
+
+    /**
+     * @static
+     *
+     * @returns {String}
+     */
+    get html() {
+        return `<div class="smartbanner smartbanner--${this.platform} js_smartbanner">
       <a href="javascript:void();" class="smartbanner__exit js_smartbanner__exit"></a>
       <div class="smartbanner__icon" style="background-image: url(${this.icon});"></div>
       <div class="smartbanner__info">
@@ -127,72 +169,115 @@ export default class SmartBanner {
       </div>
       <a href="${this.buttonUrl}" target="_blank" class="smartbanner__button"><span class="smartbanner__button__label">${this.options.button}</span></a>
     </div>`;
-  }
-
-  get height() {
-    let height = document.querySelector('.js_smartbanner').offsetHeight;
-    return height !== undefined ? height : 0;
-  }
-
-  get platformEnabled() {
-    let enabledPlatforms = this.options.enabledPlatforms || DEFAULT_PLATFORMS;
-    return enabledPlatforms && enabledPlatforms.replace(/\s+/g, '').split(',').indexOf(this.platform) !== -1;
-  }
-
-  get positioningDisabled() {
-    return this.options.disablePositioning === 'true';
-  }
-
-  get userAgentExcluded() {
-    if (!this.options.excludeUserAgentRegex) {
-      return false;
-    }
-    return Detector.userAgentMatchesRegex(this.options.excludeUserAgentRegex);
-  }
-
-  get userAgentIncluded() {
-    if (!this.options.includeUserAgentRegex) {
-      return false;
-    }
-    return Detector.userAgentMatchesRegex(this.options.includeUserAgentRegex);
-  }
-
-  publish() {
-    if (Object.keys(this.options).length === 0) {
-      throw new Error('No options detected. Please consult documentation.');
     }
 
-    if (Bakery.baked) {
-      return false;
+    /**
+     * @static
+     *
+     * @returns {Number}
+     */
+    get height() {
+        const height = document.querySelector('.js_smartbanner').offsetHeight;
+        return height !== undefined ? height : 0;
     }
 
-    // User Agent was explicetely excluded by defined excludeUserAgentRegex
-    if (this.userAgentExcluded) {
-      return false;
+    /**
+     * @static
+     *
+     * @returns {Boolean}
+     */
+    get platformEnabled() {
+        let enabledPlatforms = this.options.enabledPlatforms || DEFAULT_PLATFORMS;
+        return enabledPlatforms && enabledPlatforms.replace(/\s+/g, '').split(',').indexOf(this.platform) !== -1;
     }
 
-    // User agent was neither included by platformEnabled,
-    // nor by defined includeUserAgentRegex
-    if (!(this.platformEnabled || this.userAgentIncluded)) {
-      return false;
+    /**
+     * @static
+     *
+     * @returns {Boolean}
+     */
+    get positioningDisabled() {
+        return this.options.disablePositioning === 'true';
     }
 
-    let bannerDiv = document.createElement('div');
-    document.querySelector('body').appendChild(bannerDiv);
-    bannerDiv.outerHTML = this.html;
-    if (!this.positioningDisabled) {
-      setContentPosition(this.height);
-    }
-    addEventListeners(this);
-  }
+    /**
+     * @static
+     *
+     * @returns {Boolean}
+     */
+    get userAgentExcluded() {
 
-  exit() {
-    removeEventListeners();
-    if (!this.positioningDisabled) {
-      restoreContentPosition();
+        if (!this.options.excludeUserAgentRegex)
+            return false;
+
+        return Detector.userAgentMatchesRegex(this.options.excludeUserAgentRegex);
     }
-    let banner = document.querySelector('.js_smartbanner');
-    document.querySelector('body').removeChild(banner);
-    Bakery.bake();
-  }
+
+    /**
+     * @static
+     *
+     * @returns {Boolean}
+     */
+    get userAgentIncluded() {
+
+        if (!this.options.includeUserAgentRegex)
+            return false;
+
+        return Detector.userAgentMatchesRegex(this.options.includeUserAgentRegex);
+    }
+
+    /**
+     * @static
+     *
+     * @returns {Number}
+     */
+    get expirationDay() {
+
+        if (!this.options.expirationDay)
+            return false;
+
+        return this.options.expirationDay;
+    }
+
+    publish() {
+
+        if (Object.keys(this.options).length === 0)
+            throw new Error('No options detected. Please consult documentation.');
+
+
+        if (Bakery.baked)
+            return false;
+
+        // User Agent was explicetely excluded by defined excludeUserAgentRegex
+        if (this.userAgentExcluded)
+            return false;
+
+
+        // User agent was neither included by platformEnabled,
+        // nor by defined includeUserAgentRegex
+        if (!(this.platformEnabled || this.userAgentIncluded))
+            return false;
+
+        const bannerDiv = document.createElement('div');
+        document.querySelector('body').appendChild(bannerDiv);
+        bannerDiv.outerHTML = this.html;
+
+        if (!this.positioningDisabled)
+            setContentPosition(this.height);
+
+        addEventListeners(this);
+    }
+
+    exit() {
+        removeEventListeners();
+
+        if (!this.positioningDisabled)
+            restoreContentPosition();
+
+        const banner = document.querySelector('.js_smartbanner');
+
+        document.querySelector('body').removeChild(banner);
+
+        Bakery.bake(this.options.expirationDay);
+    }
 }
