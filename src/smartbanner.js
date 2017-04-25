@@ -243,6 +243,20 @@ export default class SmartBanner {
     /**
      * @static
      *
+     * @returns {Boolean}
+     */
+    get disabledAtDisplay() {
+
+        if (this.options.disabledAtDisplay)
+            return this.options.disabledAtDisplay;
+
+        return false;
+    }
+
+
+    /**
+     * @static
+     *
      * @returns {Number}
      */
     get expirationDay() {
@@ -275,6 +289,9 @@ export default class SmartBanner {
         const bannerDiv = document.createElement('div');
         document.querySelector('body').appendChild(bannerDiv);
         bannerDiv.outerHTML = this.html;
+
+        if (this.options.disabledAtDisplay)
+            Bakery.bake(this.options.days);
 
         if (!this.positioningDisabled)
             setContentPosition(this.height);

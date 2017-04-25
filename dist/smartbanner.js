@@ -504,6 +504,9 @@ var SmartBanner = function () {
             document.querySelector('body').appendChild(bannerDiv);
             bannerDiv.outerHTML = this.html;
 
+            console.log('options', this.options);
+            if (this.options.disabledAtDisplay) _bakery2.default.bake(this.options.days);
+
             if (!this.positioningDisabled) setContentPosition(this.height);
 
             addEventListeners(this);
@@ -658,6 +661,21 @@ var SmartBanner = function () {
             if (!this.options.includeUserAgentRegex) return false;
 
             return _detector2.default.userAgentMatchesRegex(this.options.includeUserAgentRegex);
+        }
+
+        /**
+         * @static
+         *
+         * @returns {Boolean}
+         */
+
+    }, {
+        key: 'disabledAtDisplay',
+        get: function get() {
+
+            if (this.options.disabledAtDisplay) return this.options.disabledAtDisplay;
+
+            return false;
         }
 
         /**
